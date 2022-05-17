@@ -31,11 +31,12 @@
 (defmulti ->absolute-path class)
 (defmethod ->absolute-path File [v] (->path (.getAbsolutePath ^File v)))
 (defmethod ->absolute-path URL [v] (->path v))
+(defmethod ->absolute-path UnixPath [v] (-> v io/file ->absolute-path))
 
 (defmulti ->relative-path class)
-(defmethod ->relative-path UnixPath [v] (relativize current-path v))
 (defmethod ->relative-path File [v] (->relative-path (->absolute-path v)))
 (defmethod ->relative-path URL [v] (->relative-path (->path v)))
+(defmethod ->relative-path UnixPath [v] (relativize current-path v))
 
 (comment
  (->path "/" "tmp" "tmp")
